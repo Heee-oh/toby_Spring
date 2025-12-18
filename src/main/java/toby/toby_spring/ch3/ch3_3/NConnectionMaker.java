@@ -1,0 +1,17 @@
+package toby.toby_spring.ch3.ch3_3;
+
+import toby.toby_spring.ch3.ch3_3.ConnectionMaker;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
+public class NConnectionMaker implements ConnectionMaker {
+    @Override
+    public Connection makeConnection() throws ClassNotFoundException, SQLException {
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        return DriverManager.getConnection(
+                "jdbc:mysql://localhost/springbook", "root", "1234"
+        );
+    }
+}

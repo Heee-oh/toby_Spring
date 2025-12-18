@@ -1,0 +1,15 @@
+package toby.toby_spring.ch1.ch1_4;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
+public class SimpleConnectionMaker {
+    public Connection getConnection() throws ClassNotFoundException, SQLException {
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        return DriverManager.getConnection(
+                "jdbc:mysql://localhost/springbook", "root", "1234"
+        );
+    }
+
+}
