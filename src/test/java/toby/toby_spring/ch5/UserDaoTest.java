@@ -22,9 +22,9 @@ class UserDaoTest {
     @BeforeEach
     void setUp() {
         userDao.deleteAll();
-        this.user1 = new User("gyee3", "박성칠", "springno1", Level.BASIC, 1, 0);
-        this.user2 = new User("lee1", "이길투", "springno2", Level.SILVER, 55, 10);
-        this.user3 = new User("bum2", "박범투", "springno3", Level.GOLD, 100, 40);
+        this.user1 = new User("gyee3", "박성칠", "springno1","abc@ggg.org", Level.BASIC, 1, 0);
+        this.user2 = new User("lee1", "이길투", "springno2","bbb@ggg.org", Level.SILVER, 55, 10);
+        this.user3 = new User("bum2", "박범투", "springno3","ccc@ggg.org", Level.GOLD, 100, 40);
 
 
         userDao.add(user1);

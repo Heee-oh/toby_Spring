@@ -3,6 +3,8 @@ package toby.toby_spring.ch5;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
+import org.springframework.mail.MailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 
 import javax.sql.DataSource;
 
@@ -28,5 +30,11 @@ public class DaoFactory {
         datasource.setPassword("1234");
         return datasource;
 
+    }
+
+    @Bean
+    public MailSender mailSender() {
+        MailSender mailSender = new DummyMailSender();
+        return mailSender;
     }
 }
