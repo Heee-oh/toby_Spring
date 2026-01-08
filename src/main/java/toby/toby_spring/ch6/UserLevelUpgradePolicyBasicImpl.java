@@ -1,8 +1,9 @@
-package toby.toby_spring.ch5;
+package toby.toby_spring.ch6;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+@Component
 @RequiredArgsConstructor
 public class UserLevelUpgradePolicyBasicImpl implements UserLevelUpgradePolicy {
 

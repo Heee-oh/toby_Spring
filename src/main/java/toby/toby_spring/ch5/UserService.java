@@ -15,7 +15,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Properties;
 
-@Service
+//@Service
 public class UserService {
     private UserDao userDao;
     //    private UserLevelUpgradePolicy userLevelUpgradePolicy;
@@ -25,17 +25,17 @@ public class UserService {
     private PlatformTransactionManager transactionManager;
     private MailSender mailSender;
 
-    @Autowired
+//    @Autowired
     public void setUserDao(UserDao userDao) {
         this.userDao = userDao;
     }
 
-    @Autowired
+//    @Autowired
     public void setTransactionManager(PlatformTransactionManager transactionManager) {
         this.transactionManager = transactionManager;
     }
 
-    @Autowired
+//    @Autowired
     public void setMailSender(MailSender mailSender) {
         this.mailSender = mailSender;
     }

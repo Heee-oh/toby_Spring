@@ -1,4 +1,4 @@
-package toby.toby_spring.ch5;
+package toby.toby_spring.ch6;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
