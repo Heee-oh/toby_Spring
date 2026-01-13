@@ -9,6 +9,7 @@ import org.springframework.mail.MailException;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 
+import java.lang.annotation.Annotation;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -96,6 +97,8 @@ public class UserServiceMockTest {
                 new User("madnite1", "이상호", "p4","1",Level.SILVER, 60, MIN_RECOMMEND_FOR_GOLD),
                 new User("green", "오민규", "p5", "1", Level.GOLD, 100, Integer.MAX_VALUE)
         );
+
+
     }
     @Test
     void upgradeLevelsV5() throws SQLException {

@@ -3,17 +3,16 @@ package toby.toby_spring.ch6;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.aop.framework.ProxyFactoryBean;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
-import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.mail.MailException;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.support.DefaultTransactionDefinition;
+import toby.toby_spring.ch6.factory.TxProxyFactoryBean;
 
 
 import javax.sql.DataSource;
@@ -28,7 +27,7 @@ class UserServiceTest {
     public static final int MIN_LOGCOUNT_FOR_SILVER = 50;
     public static final int MIN_RECOMMEND_FOR_GOLD = 30;
 
-    @Autowired @Qualifier("userServiceTx")
+    @Autowired
     UserService userService;
     @Autowired
     UserServiceImpl userServiceImpl;
@@ -36,7 +35,7 @@ class UserServiceTest {
     @Autowired
     PlatformTransactionManager transactionManager;
     @Autowired
-    ApplicationContext applicationContext;
+    ApplicationContext context;
 
     List<User> users;
     @Autowired
@@ -195,14 +194,25 @@ class UserServiceTest {
     }
 
     @Test
-    void upgradeAllOrNothing() {
+    @DirtiesContext // 테스트 끝나면 컨텍스트 초기화
+    void upgradeAllOrNothing() throws Exception {
         TestUserService testUserService = new TestUserService(users.get(3).getId());
         testUserService.setUserDao(this.userDao);
         testUserService.setMailSender(mailSender);
 
-        UserServiceTx userServiceTx = new UserServiceTx();
-        userServiceTx.setTransactionManager(transactionManager);
-        userServiceTx.setUserService(testUserService);
+        ProxyFactoryBean txProxyFactoryBean = context.getBean("&userService", ProxyFactoryBean.class);
+        txProxyFactoryBean.setTarget(testUserService);
+
+        UserService txUserService = (UserService) txProxyFactoryBean.getObject();
+
+
+//        // 프록시 적용
+//        TransactionHandler txHandler = new TransactionHandler(testUserService, transactionManager, "upgradeLevels");
+//        UserService txUserService = (UserService) Proxy.newProxyInstance(getClass().getClassLoader(), new Class[]{UserService.class}, txHandler);
+
+//        UserServiceTx userServiceTx = new UserServiceTx();
+//        userServiceTx.setTransactionManager(transactionManager);
+//        userServiceTx.setUserService(testUserService);
 
         userDao.deleteAll();
         for (User user : users) {
@@ -210,7 +220,7 @@ class UserServiceTest {
         }
 
         try {
-            userServiceTx.upgradeLevels();
+            txUserService.upgradeLevels();
             Assertions.fail("TestUserServiceException expected");
         } catch (TestUserServiceException e) {
         } catch (Exception e) {
@@ -225,11 +235,11 @@ class UserServiceTest {
     void bean() {
         Assertions.assertThat(userService).isNotNull();
 
-        String[] beanNamesForType = applicationContext.getBeanNamesForType(UserService.class);
+        String[] beanNamesForType = context.getBeanNamesForType(UserService.class);
         boolean isBean = false;
 
         for (String name : beanNamesForType) {
-            if (applicationContext.getBean(name) == userService) {
+            if (context.getBean(name) == userService) {
                 isBean = true;
                 break;
             }
